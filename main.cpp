@@ -6,16 +6,19 @@ unsigned char image[SIZE][SIZE];
 
 
 void loadImage();
+
 void doSomethingForImage();
+
 void saveImage();
+
 int main() {
-    loadImage();
+	loadImage();
 	doSomethingForImage();
 	saveImage();
-    return 0;
+	return 0;
 }
 
-void loadImage () {
+void loadImage() {
 	char imageFileName[100];
 	
 	// Get gray scale image file name
@@ -23,28 +26,28 @@ void loadImage () {
 	cin >> imageFileName;
 	
 	// Add to it .bmp extension and load image
-	strcat (imageFileName, ".bmp");
+	strcat(imageFileName, ".bmp");
 	readGSBMP(imageFileName, image);
 }
 
 void doSomethingForImage() {
 	for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j< SIZE; j++) {
+		for (int j = 0; j < SIZE; j++) {
 
 // Example code to convert to BW the image
 //   A better version should NOt use 127 but the
 //   average of the pixels
-
-        if (image[i][j] > 127)
-            image[i][j] = 255;
-        else
-            image[i][j] = 0;
+			
+			if (image[i][j] > 127)
+				image[i][j] = 255;
+			else
+				image[i][j] = 0;
 // do something with the image
 		}
 	}
 }
 
-void saveImage () {
+void saveImage() {
 	char imageFileName[100];
 	
 	// Get gray scale image target file name
@@ -52,6 +55,6 @@ void saveImage () {
 	cin >> imageFileName;
 	
 	// Add to it .bmp extension and load image
-	strcat (imageFileName, ".bmp");
+	strcat(imageFileName, ".bmp");
 	writeGSBMP(imageFileName, image);
 }
