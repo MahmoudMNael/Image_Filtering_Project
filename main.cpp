@@ -18,6 +18,13 @@ void loadImage();
 void doSomethingForImage(string filter);
 void saveImage();
 
+// Filters
+void convertImageToBlackAndWhite();
+void flipImage();
+void flipVertical();
+void flipHorizontal();
+// End Filters
+
 int main() {
 	string filterNumber = inputFilterNumber();
     loadImage();
@@ -55,6 +62,7 @@ void doSomethingForImage(string filter) {
 	switch (filter[0]) {
 		case '1':
 			// use Function
+			convertImageToBlackAndWhite();
 			break;
 		case '2':
 			// use Function
@@ -64,6 +72,7 @@ void doSomethingForImage(string filter) {
 			break;
 		case '4':
 			// use Function
+			flipImage();
 			break;
 		case '5':
 			// use Function
@@ -85,3 +94,74 @@ void saveImage () {
 	strcat (imageFileName, ".bmp");
 	writeGSBMP(imageFileName, image);
 }
+
+// Filters
+void convertImageToBlackAndWhite() {
+	int pixelSum = 0;
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = 0; j < SIZE; ++j) {
+			pixelSum += image[i][j];
+		}
+	}
+	int pixelAvg = pixelSum / 65025;
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = 0; j < SIZE; ++j) {
+			if (image[i][j] > pixelAvg)
+				image[i][j] = 255;
+			else
+				image[i][j] = 0;
+		}
+	}
+}
+
+void flipVertical() {
+	unsigned char temp;
+	for (int i = 0; i < SIZE / 2; ++i) {
+		for (int j = 0; j < SIZE; ++j) {
+			temp = image[i][j];
+			image[i][j] = image[SIZE - 1 - i][j];
+			image[SIZE - 1 - i][j] = temp;
+		}
+	}
+}
+
+void flipHorizontal(){
+	unsigned char temp;
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = 0; j < SIZE / 2; ++j) {
+			temp = image[i][j];
+			image[i][j] = image[i][SIZE - 1 - j];
+			image[i][SIZE - 1 - j] = temp;
+		}
+	}
+}
+
+void flipImage() {
+	string enteredFlipNumber;
+	cout << "1. Horizontal Flip\n" << "2. Vertical Flip\n" << "3. Horizontal and Vertical Flip" << endl;
+	cout << "Enter the desired number: " << endl;
+	while (cin >> enteredFlipNumber) {
+		if (enteredFlipNumber[0] >= '1' && enteredFlipNumber[0] <= '6') {
+			break;
+		} else {
+			cout << "Enter a valid number from 1~6: " << endl;
+		}
+	}
+	switch (enteredFlipNumber[0]) {
+		case '1':
+			// use Function
+			flipHorizontal();
+			break;
+		case '2':
+			// use Function
+			flipVertical();
+			break;
+		case '3':
+			// use Function
+			flipVertical();
+			flipHorizontal();
+			break;
+	}
+	
+}
+// End Filters
