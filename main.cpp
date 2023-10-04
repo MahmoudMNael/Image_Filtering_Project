@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 #include "bmplib.h"
-
+//
 using namespace std;
 unsigned char image[SIZE][SIZE];
 
