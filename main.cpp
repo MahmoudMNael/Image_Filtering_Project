@@ -1,3 +1,28 @@
+// FCAI – OOP Programming – 2023 - Assignment 1
+// Program Name: main.cpp
+// Last Modification Date: 07/10/2023
+// Authors: [
+//              {
+//					name: "Mahmoud Mohammed Nael",
+//                  id: 20220322,
+//					group: A,
+//              },
+//              {
+//					name: "Mazen Mohammed Nayef",
+//                  id: 20220268,
+//					group: A,
+//              },
+//              {
+//					name: "Mohammed Ahmed Fathy",
+//                  id: N/A,
+//					group: A,
+//              },
+//          ]
+// Teaching Assistant: N/A
+// Purpose: Demonstrate use of bmplip for handling
+//          bmp colored and grayscale images
+//          Program load a gray image and store in another file
+
 #include <bits/stdc++.h>
 #include "bmplib.h"
 
@@ -10,16 +35,16 @@ void loadImage();
 void loadImage2();
 void doSomethingForImage(string filter);
 void saveImage();
-void mergeImages();
-void lightenAndDarkenImages();
 
 // Filters
-void rotate ();
-void invert ();
+void rotateImage();
+void invertImage();
 void convertImageToBlackAndWhite();
 void flipImage();
 void flipVertical();
 void flipHorizontal();
+void mergeImages();
+void lightenOrDarkenImage();
 // End Filters
 
 int main() {
@@ -70,56 +95,27 @@ void loadImage2() {
 void doSomethingForImage(string filter) {
 	switch (filter[0]) {
 		case '1':
-			// use Function
 			convertImageToBlackAndWhite();
 			break;
         case '2':
-            invert();
+            invertImage();
 			break;
 		case '3':
             loadImage2();
             mergeImages();
             break;
 		case '4':
-			// use Function
 			flipImage();
 			break;
 		case '5':{
-                    rotate();
+			rotateImage();
 			break;}
 		case '6':
-            lightenAndDarkenImages();
+            lightenOrDarkenImage();
 			break;
 	}
 }
-void invert(){
-for (int i=0;i<255;i++){
-    for(int j=0 ;j<255;j++) {
 
-        image[i][j] = 255 - image[i][j];
-    }
-}
-}
-void rotate () {
-    int Degree;
-    cout << "enter the degree: ";
-    cin >> Degree;
-for(int k=0;k<(Degree/90);k++) {
-    for (int i = 0; i < 256; i++) {
-        for (int j = i + 1; j < 256; j++) {
-            swap(image[i][j], image[j][i]);
-        }
-    }
-    for (int i = 0; i < 256; i++) {
-        int left = 0, right = 255;
-        while (left < right) {
-            swap(image[i][left], image[i][right]);
-            left++;
-            right--;
-        }
-    }
-}
-}
 void saveImage () {
 	char imageFileName[100];
 	
@@ -130,45 +126,6 @@ void saveImage () {
 	// Add to it .bmp extension and load image
 	strcat (imageFileName, ".bmp");
 	writeGSBMP(imageFileName, image);
-}
-
-
-void mergeImages() {
-    int average;
-
-    // Add 2 photos to each other by taking the average of gray level of each corresponding pixel.
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            average = ( image[i][j] + image2[i][j] ) / 2;
-            image[i][j] = average;
-        }
-    }
-}
-
-void lightenAndDarkenImages() {
-    char type;
-
-    // Get the operation that customer wants.
-    cout << "Please Choose If You Want It (L)ighten/(D)arken By 50%: ";
-    cin >> type;
-
-    // Process of lighten images.
-    if (type == 'L' || type == 'l'){
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                image[i][j] = image[i][j] + (255-image[i][j])*0.5;
-            }
-        }
-    }
-
-    // Process of darken images.
-    else if (type == 'D' || type == 'd'){
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                image[i][j] = image[i][j] * 0.5;
-            }
-        }
-    }
 }
 
 
@@ -183,7 +140,7 @@ void convertImageToBlackAndWhite() {
 	}
 	
 	// Compare the pixel with the avg if greater than white else black
-	int pixelAvg = pixelSum / 65025;
+	int pixelAvg = pixelSum / (SIZE * SIZE);
 	for (int i = 0; i < SIZE; ++i) {
 		for (int j = 0; j < SIZE; ++j) {
 			if (image[i][j] > pixelAvg)
@@ -245,6 +202,73 @@ void flipImage() {
 			break;
 	}
 	
+}
+
+void invertImage(){
+	for (int i=0;i<255;i++){
+		for(int j=0 ;j<255;j++) {
+			image[i][j] = 255 - image[i][j];
+		}
+	}
+}
+
+void rotateImage () {
+	int Degree;
+	cout << "enter the degree: ";
+	cin >> Degree;
+	for(int k=0;k<(Degree/90);k++) {
+		for (int i = 0; i < 256; i++) {
+			for (int j = i + 1; j < 256; j++) {
+				swap(image[i][j], image[j][i]);
+			}
+		}
+		for (int i = 0; i < 256; i++) {
+			int left = 0, right = 255;
+			while (left < right) {
+				swap(image[i][left], image[i][right]);
+				left++;
+				right--;
+			}
+		}
+	}
+}
+
+void mergeImages() {
+	int average;
+	
+	// Add 2 photos to each other by taking the average of gray level of each corresponding pixel.
+	for (int i = 0; i < SIZE; i++) {
+		for (int j = 0; j < SIZE; j++) {
+			average = ( image[i][j] + image2[i][j] ) / 2;
+			image[i][j] = average;
+		}
+	}
+}
+
+void lightenOrDarkenImage() {
+	char type;
+	
+	// Get the operation that customer wants.
+	cout << "Please Choose If You Want It (L)ighten/(D)arken By 50%: ";
+	cin >> type;
+	
+	// Process of lighten images.
+	if (type == 'L' || type == 'l'){
+		for (int i = 0; i < SIZE; i++) {
+			for (int j = 0; j < SIZE; j++) {
+				image[i][j] = image[i][j] + (255-image[i][j])*0.5;
+			}
+		}
+	}
+		
+		// Process of darken images.
+	else if (type == 'D' || type == 'd'){
+		for (int i = 0; i < SIZE; i++) {
+			for (int j = 0; j < SIZE; j++) {
+				image[i][j] = image[i][j] * 0.5;
+			}
+		}
+	}
 }
 // End Filters
 
