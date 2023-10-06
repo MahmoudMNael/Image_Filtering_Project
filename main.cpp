@@ -4,15 +4,6 @@
 using namespace std;
 unsigned char image[SIZE][SIZE];
 
-//enum Filters {
-//	BW_IMAGE = 1,
-//	INVERT_IMAGE,
-//	MERGE_IMAGE,
-//	FLIP_IMAGE,
-//	ROTATE_IMAGE,
-//	DARKEN_OR_LIGHTEN_IMAGE
-//};
-
 string inputFilterNumber();
 void loadImage();
 void doSomethingForImage(string filter);
@@ -26,8 +17,8 @@ void flipHorizontal();
 // End Filters
 
 int main() {
-	string filterNumber = inputFilterNumber();
     loadImage();
+	string filterNumber = inputFilterNumber();
 	doSomethingForImage(filterNumber);
 	saveImage();
     return 0;
@@ -97,12 +88,15 @@ void saveImage () {
 
 // Filters
 void convertImageToBlackAndWhite() {
+	// Get the average of the pixels
 	int pixelSum = 0;
 	for (int i = 0; i < SIZE; ++i) {
 		for (int j = 0; j < SIZE; ++j) {
 			pixelSum += image[i][j];
 		}
 	}
+	
+	// Compare the pixel with the avg if greater than white else black
 	int pixelAvg = pixelSum / 65025;
 	for (int i = 0; i < SIZE; ++i) {
 		for (int j = 0; j < SIZE; ++j) {
@@ -115,6 +109,7 @@ void convertImageToBlackAndWhite() {
 }
 
 void flipVertical() {
+	// Loop for half the image and swap every pixel with its corresponding one on the vertical direction
 	unsigned char temp;
 	for (int i = 0; i < SIZE / 2; ++i) {
 		for (int j = 0; j < SIZE; ++j) {
@@ -126,6 +121,7 @@ void flipVertical() {
 }
 
 void flipHorizontal(){
+	// Loop for half the image and swap every pixel with its corresponding one on the horizontal direction
 	unsigned char temp;
 	for (int i = 0; i < SIZE; ++i) {
 		for (int j = 0; j < SIZE / 2; ++j) {
@@ -141,10 +137,10 @@ void flipImage() {
 	cout << "1. Horizontal Flip\n" << "2. Vertical Flip\n" << "3. Horizontal and Vertical Flip" << endl;
 	cout << "Enter the desired number: " << endl;
 	while (cin >> enteredFlipNumber) {
-		if (enteredFlipNumber[0] >= '1' && enteredFlipNumber[0] <= '6') {
+		if (enteredFlipNumber[0] >= '1' && enteredFlipNumber[0] <= '3') {
 			break;
 		} else {
-			cout << "Enter a valid number from 1~6: " << endl;
+			cout << "Enter a valid number from 1~3: " << endl;
 		}
 	}
 	switch (enteredFlipNumber[0]) {
