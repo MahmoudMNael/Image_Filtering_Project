@@ -3,11 +3,15 @@
 
 using namespace std;
 unsigned char image[SIZE][SIZE];
+unsigned char image2[SIZE][SIZE];
 
 string inputFilterNumber();
 void loadImage();
+void loadImage2();
 void doSomethingForImage(string filter);
 void saveImage();
+void mergeImages();
+void lightenAndDarkenImages();
 
 // Filters
 void rotate ();
@@ -51,6 +55,18 @@ void loadImage () {
 	readGSBMP(imageFileName, image);
 }
 
+void loadImage2() {
+    char imageFileName2[100];
+
+    // Get gray scale image file name
+    cout << "Enter the second source image file name: ";
+    cin >> imageFileName2;
+
+    // Add to it .bmp extension and load image
+    strcat (imageFileName2, ".bmp");
+    readGSBMP(imageFileName2, image2);
+}
+
 void doSomethingForImage(string filter) {
 	switch (filter[0]) {
 		case '1':
@@ -61,8 +77,9 @@ void doSomethingForImage(string filter) {
             invert();
 			break;
 		case '3':
-			// use Function
-			break;
+            loadImage2();
+            mergeImages();
+            break;
 		case '4':
 			// use Function
 			flipImage();
@@ -71,7 +88,7 @@ void doSomethingForImage(string filter) {
                     rotate();
 			break;}
 		case '6':
-			// use Function
+            lightenAndDarkenImages();
 			break;
 	}
 }
@@ -114,6 +131,46 @@ void saveImage () {
 	strcat (imageFileName, ".bmp");
 	writeGSBMP(imageFileName, image);
 }
+
+
+void mergeImages() {
+    int average;
+
+    // Add 2 photos to each other by taking the average of gray level of each corresponding pixel.
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            average = ( image[i][j] + image2[i][j] ) / 2;
+            image[i][j] = average;
+        }
+    }
+}
+
+void lightenAndDarkenImages() {
+    char type;
+
+    // Get the operation that customer wants.
+    cout << "Please Choose If You Want It (L)ighten/(D)arken By 50%: ";
+    cin >> type;
+
+    // Process of lighten images.
+    if (type == 'L' || type == 'l'){
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = image[i][j] + (255-image[i][j])*0.5;
+            }
+        }
+    }
+
+    // Process of darken images.
+    else if (type == 'D' || type == 'd'){
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = image[i][j] * 0.5;
+            }
+        }
+    }
+}
+
 
 // Filters
 void convertImageToBlackAndWhite() {
@@ -190,3 +247,4 @@ void flipImage() {
 	
 }
 // End Filters
+
