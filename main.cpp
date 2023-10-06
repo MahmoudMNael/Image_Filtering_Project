@@ -17,7 +17,8 @@ string inputFilterNumber();
 void loadImage();
 void doSomethingForImage(string filter);
 void saveImage();
-
+void rotate ();
+void invert ();
 int main() {
 	string filterNumber = inputFilterNumber();
     loadImage();
@@ -56,8 +57,8 @@ void doSomethingForImage(string filter) {
 		case '1':
 			// use Function
 			break;
-		case '2':
-			// use Function
+        case '2':
+            invert();
 			break;
 		case '3':
 			// use Function
@@ -65,15 +66,42 @@ void doSomethingForImage(string filter) {
 		case '4':
 			// use Function
 			break;
-		case '5':
-			// use Function
-			break;
+		case '5':{
+                    rotate();
+			break;}
 		case '6':
 			// use Function
 			break;
 	}
 }
+void invert(){
+for (int i=0;i<255;i++){
+    for(int j=0 ;j<255;j++) {
 
+        image[i][j] = 255 - image[i][j];
+    }
+}
+}
+void rotate () {
+    int Degree;
+    cout << "enter the degree: ";
+    cin >> Degree;
+for(int k=0;k<(Degree/90);k++) {
+    for (int i = 0; i < 256; i++) {
+        for (int j = i + 1; j < 256; j++) {
+            swap(image[i][j], image[j][i]);
+        }
+    }
+    for (int i = 0; i < 256; i++) {
+        int left = 0, right = 255;
+        while (left < right) {
+            swap(image[i][left], image[i][right]);
+            left++;
+            right--;
+        }
+    }
+}
+}
 void saveImage () {
 	char imageFileName[100];
 	
