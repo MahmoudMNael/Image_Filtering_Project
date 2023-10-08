@@ -48,22 +48,45 @@ void lightenOrDarkenImage();
 // End Filters
 
 int main() {
+	cout << "Ahlan ya user ya habibi ;)" << endl;
     loadImage();
 	string filterNumber = inputFilterNumber();
 	doSomethingForImage(filterNumber);
-	saveImage();
+	while (filterNumber[0] != '0'){
+		filterNumber = inputFilterNumber();
+		doSomethingForImage(filterNumber);
+		if(filterNumber[0] == 's'){
+			string inputChar;
+			cout << "1. Do you want to continue on the same image?\n2. Or choose another one?\n 0. Exit" << endl;
+			while (cin >> inputChar) {
+				if (inputChar[0] >= '0' || inputChar[0] <= '2') {
+					if (inputChar[0] == '1'){
+						break;
+					} else if (inputChar[0] == '2') {
+						loadImage();
+						break;
+					} else {
+						cout << "Thanks for using our program!" << endl;
+						return 0;
+					}
+				} else {
+					cout << "Enter a valid number from 0~2: " << endl;
+				}
+			}
+		}
+	}
     return 0;
 }
 
 string inputFilterNumber(){
 	string filterNumber;
-	cout << "1. Black and White\n" << "2. Invert Image\n" << "3. Merge Images\n" << "4. Flip Image\n" << "5. Rotate Image\n" << "6. Darken or Lighten Image\n" << endl;
-	cout << "Enter the number of the filter you desire: " << endl;
+	cout << "1. Black and White\n" << "2. Invert Image\n" << "3. Merge Images\n" << "4. Flip Image\n" << "5. Rotate Image\n" << "6. Darken or Lighten Image\n" << "s. Save the image to a file\n" << "0. Exit\n" << endl;
+	cout << "Enter the number of the filter you desire or 0 to exit: " << endl;
 	while (cin >> filterNumber) {
-		if (filterNumber[0] >= '1' && filterNumber[0] <= '6') {
+		if ((filterNumber[0] >= '0' && filterNumber[0] <= '6') || filterNumber[0] == 's') {
 			return filterNumber;
 		} else {
-			cout << "Enter a valid number from 1~6: " << endl;
+			cout << "Enter a valid number from 0~6 or s: " << endl;
 		}
 	}
 }
@@ -94,6 +117,9 @@ void loadImage2() {
 
 void doSomethingForImage(string filter) {
 	switch (filter[0]) {
+		case '0':
+			cout << "Thanks for using our program!" << endl;
+			return;
 		case '1':
 			convertImageToBlackAndWhite();
 			break;
@@ -112,6 +138,9 @@ void doSomethingForImage(string filter) {
 			break;}
 		case '6':
             lightenOrDarkenImage();
+			break;
+		case 's':
+			saveImage();
 			break;
 	}
 }
@@ -213,10 +242,16 @@ void invertImage(){
 }
 
 void rotateImage () {
-	int Degree;
-	cout << "enter the degree: ";
-	cin >> Degree;
-	for(int k=0;k<(Degree/90);k++) {
+	long long degree;
+	cout << "Enter the degree you desire (90, 180, 270): " << endl;
+	while (cin >> degree) {
+		if (degree == 90 || degree == 180 || degree == 270) {
+			break;
+		} else {
+			cout << "Enter a valid degree (90, 180, 270): " << endl;
+		}
+	}
+	for(int k=0;k<(degree/90);k++) {
 		for (int i = 0; i < 256; i++) {
 			for (int j = i + 1; j < 256; j++) {
 				swap(image[i][j], image[j][i]);
@@ -246,14 +281,20 @@ void mergeImages() {
 }
 
 void lightenOrDarkenImage() {
-	char type;
+	string type;
 	
 	// Get the operation that customer wants.
 	cout << "Please Choose If You Want It (L)ighten/(D)arken By 50%: ";
-	cin >> type;
+	while (cin >> type) {
+		if (type[0] == 'L' || type[0] == 'D' || type[0] == 'l' || type[0] == 'd') {
+			break;
+		} else {
+			cout << "Enter a valid letter either (L/l) or (D/d): " << endl;
+		}
+	}
 	
 	// Process of lighten images.
-	if (type == 'L' || type == 'l'){
+	if (type[0] == 'L' || type[0] == 'l'){
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
 				image[i][j] = image[i][j] + (255-image[i][j])*0.5;
@@ -262,7 +303,7 @@ void lightenOrDarkenImage() {
 	}
 		
 		// Process of darken images.
-	else if (type == 'D' || type == 'd'){
+	else if (type[0] == 'D' || type[0] == 'd'){
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
 				image[i][j] = image[i][j] * 0.5;
