@@ -1,23 +1,9 @@
 // FCAI – OOP Programming – 2023 - Assignment 1
 // Program Name: main.cpp
 // Last Modification Date: 07/10/2023
-// Authors: [
-//              {
-//					name: "Mahmoud Mohammed Nael",
-//                  id: 20220322,
-//					group: A,
-//              },
-//              {
-//					name: "Mazen Mohammed Nayef",
-//                  id: 20220268,
-//					group: A,
-//              },
-//              {
-//					name: "Mohammed Ahmed Fathy",
-//                  id: N/A,
-//					group: A,
-//              },
-//          ]
+// Author1: Mahmoud Mohammed Nael, 20220322, A
+// Author2: Mazen Mohammed Nayef, 20220268, A
+// Author3: Mohammed Ahmed Fathy, N/A, A
 // Teaching Assistant: N/A
 // Purpose: Demonstrate use of bmplip for handling
 //          bmp colored and grayscale images
@@ -48,7 +34,6 @@ void lightenOrDarkenImage();
 // End Filters
 
 int main() {
-	cout << "Ahlan ya user ya habibi ;)" << endl;
     loadImage();
 	string filterNumber = inputFilterNumber();
 	doSomethingForImage(filterNumber);
