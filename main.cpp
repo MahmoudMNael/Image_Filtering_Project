@@ -1,9 +1,9 @@
 // FCAI – OOP Programming – 2023 - Assignment 1
 // Program Name: main.cpp
-// Last Modification Date: 07/10/2023
-// Author1: Mahmoud Mohammed Nael, 20220322, A
-// Author2: Mazen Mohammed Nayef, 20220268, A
-// Author3: Mohammed Ahmed Fathy, N/A, A
+// Last Modification Date: 19/10/2023
+// Author1: Mahmoud Mohammed Nael, 20220322, A, S12
+// Author2: Mazen Mohammed Nayef, 20220268, A, S12
+// Author3: Mohammed Ahmed Fathy, N/A, A, S12
 // Teaching Assistant: N/A
 // Purpose: Demonstrate use of bmplip for handling
 //          bmp colored and grayscale images
@@ -26,7 +26,7 @@ void loadImage();
 void loadImage2();
 void doSomethingForImage(string filter);
 void saveImage();
-void dividedImage();
+
 
 // Filters
 void rotateImage();
@@ -38,6 +38,7 @@ void flipHorizontal();
 void mergeImages();
 void lightenOrDarkenImage();
 void enlargeImage();
+void dividedImage();
 void shuffleImage();
 void skewHorizontally();
 void skewVetically();
@@ -84,7 +85,7 @@ int main() {
 
 string inputFilterNumber(){
 	string filterNumber;
-	cout << "1. Black and White\n" << "2. Invert Image\n" << "3. Merge Images\n" << "4. Flip Image\n" << "5. Rotate Image\n" << "6. Darken or Lighten Image\n" << "7. Detect Image Edges\n" << "a. Mirror Image\n" << "d. Crop Image\n" << "s. Save the image to a file\n" << "0. Exit\n" << endl;
+	cout << "1. Black and White\n" << "2. Invert Image\n" << "3. Merge Images\n" << "4. Flip Image\n" << "5. Rotate Image\n" << "6. Darken or Lighten Image\n" << "7. Detect Image Edges\n" << "8. Enlarge Image\n" << "9. Shrink Image\n" << "a. Mirror Image\n" << "b. Shuffle Image\n" << "c. Blur Image\n" << "d. Crop Image\n" << "e. Skew Image Horizontally\n" << "f. Skew Image Vertically\n" << "s. Save the image to a file\n" << "0. Exit\n" << endl;
 	cout << "Enter the number of the filter you desire or 0 to exit: " << endl;
 	while (cin >> filterNumber) {
 		if ((filterNumber[0] >= '0' && filterNumber[0] <= '9' ) || (filterNumber[0] >= 'a' && filterNumber[0] <= 'f') || filterNumber[0] == 's') {
@@ -143,44 +144,36 @@ void doSomethingForImage(string filter) {
 		case '6':
             lightenOrDarkenImage();
 			break;
-        case '7':
-            break;
+		case '7':
+			detectImageEdges();
+			break;
         case '8':
             enlargeImage();
             break;
-        case'b':
-            dividedImage();
-            shuffleImage();
-            break;
-		case 's':
-			saveImage();
+		case '9':
+			shrinkImage();
 			break;
-        case '9':
-            shrinkImage();
-            break;
-		case 's':
-			saveImage();
+		case 'a':
+			mirrorImage();
 			break;
-        case 'c':
+		case'b':
+			dividedImage();
+			shuffleImage();
+			break;
+		case 'c':
             blurImage();
             break;
+		case 'd':
+			cropImage();
+			break;
         case 'e':
             skewHorizontally();
             break;
         case 'f':
             skewVetically();
             break;
-		case '7':
-			detectImageEdges();
-			break;
 		case 's':
 			saveImage();
-			break;
-		case 'a':
-			mirrorImage();
-			break;
-		case 'd':
-			cropImage();
 			break;
 	}
 }
@@ -453,73 +446,73 @@ void dividedImage(){
         }
     }
 }
-void shuffleImage(){
-    int qrt;
-    cout<<"enter the order of quarter you need: \n";
-    for(int k=0;k<4;k++){
-        cin>>qrt;
-        if(qrt<=0&&qrt>4){
-            cout<<"enter the valid no between 1 to 4 : \n";
-        }
-        if (k==0){
-            for(int i=0;i<128;i++){
-                for(int j=0;j<128;j++){
-                    if(qrt==1){
-                        image[i][j]=imageq1[i][j];
-                    }else if (qrt==2){
-                        image[i][j]=imageq2[i][j];
-                    }else if (qrt==3){
-                        image[i][j]=imageq3[i][j];
-                    }else if (qrt==4){
-                        image[i][j]=imageq4[i][j];
-                    }
-                }
-            }
-        }else if (k==1){
-            for(int i=0;i<128;i++){
-                for(int j=128,x=0;j<256;j++,x++){
-                    if(qrt==1){
-                        image[i][j]=imageq1[i][x];
-                    }else if (qrt==2){
-                        image[i][j]=imageq2[i][x];
-                    }else if (qrt==3){
-                        image[i][j]=imageq3[i][x];
-                    }else if (qrt==4){
-                        image[i][j]=imageq4[i][x];
-                    }
-                }
-            }
-        }else if(k==2){
-            for(int i=128,y=0;i<256;i++,y++){
-                for(int j=0;j<128;j++){
-                    if(qrt==1){
-                        image[i][j]=imageq1[y][j];
-                    }else if (qrt==2){
-                        image[i][j]=imageq2[y][j];
-                    }else if (qrt==3){
-                        image[i][j]=imageq3[y][j];
-                    }else if (qrt==4){
-                        image[i][j]=imageq4[y][j];
-                    }
-                }
-            }
-        }else if (k==3){
-            for(int i=128,y=0;i<256;i++,y++){
-                for(int j=128,x=0;j<256;j++,x++){
-                    if(qrt==1){
-                        image[i][j]=imageq1[y][x];
-                    }else if (qrt==2){
-                        image[i][j]=imageq2[y][x];
-                    }else if (qrt==3){
-                        image[i][j]=imageq3[y][x];
-                    }else if (qrt==4){
-                        image[i][j]=imageq4[y][x];
-                    }
-                }
-            }
-        }
-    }
-
+void shuffleImage() {
+	int qrt;
+	cout << "enter the order of quarter you need: \n";
+	for (int k = 0; k < 4; k++) {
+		cin >> qrt;
+		if (qrt <= 0 && qrt > 4) {
+			cout << "enter the valid no between 1 to 4 : \n";
+		}
+		if (k == 0) {
+			for (int i = 0; i < 128; i++) {
+				for (int j = 0; j < 128; j++) {
+					if (qrt == 1) {
+						image[i][j] = imageq1[i][j];
+					} else if (qrt == 2) {
+						image[i][j] = imageq2[i][j];
+					} else if (qrt == 3) {
+						image[i][j] = imageq3[i][j];
+					} else if (qrt == 4) {
+						image[i][j] = imageq4[i][j];
+					}
+				}
+			}
+		} else if (k == 1) {
+			for (int i = 0; i < 128; i++) {
+				for (int j = 128, x = 0; j < 256; j++, x++) {
+					if (qrt == 1) {
+						image[i][j] = imageq1[i][x];
+					} else if (qrt == 2) {
+						image[i][j] = imageq2[i][x];
+					} else if (qrt == 3) {
+						image[i][j] = imageq3[i][x];
+					} else if (qrt == 4) {
+						image[i][j] = imageq4[i][x];
+					}
+				}
+			}
+		} else if (k == 2) {
+			for (int i = 128, y = 0; i < 256; i++, y++) {
+				for (int j = 0; j < 128; j++) {
+					if (qrt == 1) {
+						image[i][j] = imageq1[y][j];
+					} else if (qrt == 2) {
+						image[i][j] = imageq2[y][j];
+					} else if (qrt == 3) {
+						image[i][j] = imageq3[y][j];
+					} else if (qrt == 4) {
+						image[i][j] = imageq4[y][j];
+					}
+				}
+			}
+		} else if (k == 3) {
+			for (int i = 128, y = 0; i < 256; i++, y++) {
+				for (int j = 128, x = 0; j < 256; j++, x++) {
+					if (qrt == 1) {
+						image[i][j] = imageq1[y][x];
+					} else if (qrt == 2) {
+						image[i][j] = imageq2[y][x];
+					} else if (qrt == 3) {
+						image[i][j] = imageq3[y][x];
+					} else if (qrt == 4) {
+						image[i][j] = imageq4[y][x];
+					}
+				}
+			}
+		}
+	}
+}
 
 void mirrorLeft(){
 	for (int i = 0; i < SIZE; ++i) {
@@ -637,8 +630,6 @@ void detectImageEdges(){
 		}
 	}
 }
-// End Filters
-
 
 void skewHorizontally() {
     // Create New Image, Defining The Variables And Getting The Skew Degree.
