@@ -138,9 +138,9 @@ void doSomethingForImage(string filter) {
 		case '4':
 			flipImage();
 			break;
-		case '5':{
+		case '5':
 			rotateImage();
-			break;}
+			break;
 		case '6':
             lightenOrDarkenImage();
 			break;
