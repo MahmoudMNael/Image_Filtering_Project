@@ -1,23 +1,9 @@
 // FCAI – OOP Programming – 2023 - Assignment 1
 // Program Name: main.cpp
 // Last Modification Date: 07/10/2023
-// Authors: [
-//              {
-//					name: "Mahmoud Mohammed Nael",
-//                  id: 20220322,
-//					group: A,
-//              },
-//              {
-//					name: "Mazen Mohammed Nayef",
-//                  id: 20220268,
-//					group: A,
-//              },
-//              {
-//					name: "Mohammed Ahmed Fathy",
-//                  id: N/A,
-//					group: A,
-//              },
-//          ]
+// Author1: Mahmoud Mohammed Nael, 20220322, A
+// Author2: Mazen Mohammed Nayef, 20220268, A
+// Author3: Mohammed Ahmed Fathy, N/A, A
 // Teaching Assistant: N/A
 // Purpose: Demonstrate use of bmplip for handling
 //          bmp colored and grayscale images
@@ -49,10 +35,16 @@ void skewHorizontally();
 void skewVetically();
 void blurImage();
 void shrinkImage();
+void mirrorLeft();
+void mirrorRight();
+void mirrorUpper();
+void mirrorLower();
+void mirrorImage();
+void cropImage();
+void detectImageEdges();
 // End Filters
 
 int main() {
-	cout << "Ahlan ya user ya habibi ;)" << endl;
     loadImage();
 	string filterNumber = inputFilterNumber();
 	doSomethingForImage(filterNumber);
@@ -84,13 +76,13 @@ int main() {
 
 string inputFilterNumber(){
 	string filterNumber;
-	cout << "1. Black and White\n" << "2. Invert Image\n" << "3. Merge Images\n" << "4. Flip Image\n" << "5. Rotate Image\n" << "6. Darken or Lighten Image\n" << "s. Save the image to a file\n" << "0. Exit\n" << endl;
+	cout << "1. Black and White\n" << "2. Invert Image\n" << "3. Merge Images\n" << "4. Flip Image\n" << "5. Rotate Image\n" << "6. Darken or Lighten Image\n" << "7. Detect Image Edges\n" << "a. Mirror Image\n" << "d. Crop Image\n" << "s. Save the image to a file\n" << "0. Exit\n" << endl;
 	cout << "Enter the number of the filter you desire or 0 to exit: " << endl;
 	while (cin >> filterNumber) {
-		if ((filterNumber[0] >= '0' && filterNumber[0] <= '6') || filterNumber[0] == 's') {
+		if ((filterNumber[0] >= '0' && filterNumber[0] <= '9' ) || (filterNumber[0] >= 'a' && filterNumber[0] <= 'f') || filterNumber[0] == 's') {
 			return filterNumber;
 		} else {
-			cout << "Enter a valid number from 0~6 or s: " << endl;
+			cout << "Enter a valid number from 0~9 or a~f or s: " << endl;
 		}
 	}
 }
@@ -158,6 +150,18 @@ void doSomethingForImage(string filter) {
         case 'f':
             skewVetically();
             break;
+		case '7':
+			detectImageEdges();
+			break;
+		case 's':
+			saveImage();
+			break;
+		case 'a':
+			mirrorImage();
+			break;
+		case 'd':
+			cropImage();
+			break;
 	}
 }
 
@@ -327,6 +331,124 @@ void lightenOrDarkenImage() {
 		}
 	}
 }
+
+void mirrorLeft(){
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = 0; j < SIZE / 2; ++j) {
+			image[i][SIZE - 1 - j] = image[i][j];
+		}
+	}
+}
+
+void mirrorRight(){
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = SIZE / 2 - 1, k = SIZE / 2 - 1; j < SIZE, k >= 0; ++j, --k) {
+			image[i][k] = image[i][j];
+		}
+	}
+}
+
+void mirrorUpper(){
+	for (int i = 0; i < SIZE / 2; ++i) {
+		for (int j = 0; j < SIZE; ++j) {
+			image[SIZE - 1 - i][j] = image[i][j];
+		}
+	}
+}
+
+void mirrorLower(){
+	for (int i = SIZE / 2 - 1, k = SIZE / 2 - 1; i < SIZE, k >= 0; ++i, --k) {
+		for (int j = 0; j < SIZE; ++j) {
+			image[k][j] = image[i][j];
+		}
+	}
+}
+
+void mirrorImage() {
+	string enteredMirrorNumber;
+	cout << "1. Mirror Left\n" << "2. Mirror Right\n" << "3. Mirror Upper\n" << "4. Mirror Lower" << endl;
+	cout << "Enter the desired number: " << endl;
+	while (cin >> enteredMirrorNumber) {
+		if (enteredMirrorNumber[0] >= '1' && enteredMirrorNumber[0] <= '4') {
+			break;
+		} else {
+			cout << "Enter a valid number from 1~4: " << endl;
+		}
+	}
+	switch (enteredMirrorNumber[0]) {
+		case '1':
+			mirrorLeft();
+			break;
+		case '2':
+			mirrorRight();
+			break;
+		case '3':
+			mirrorUpper();
+			break;
+		case '4':
+			mirrorLower();
+			break;
+	}
+}
+
+void cropImage(){
+	int x, y;
+	cout << "Please, enter the desired coordinates" << endl;
+	cout << "X: \n";
+	cin >> x;
+	cout << "Y: \n";
+	cin >> y;
+	
+	int length, width, skippedLength, skippedWidth;
+	cout << "Please, enter the desired dimensions" << endl;
+	cout << "Length: \n";
+	cin >> length;
+	cout << "Width: \n";
+	cin >> width;
+	
+	skippedLength = (SIZE - 1 - length) / 2;
+	skippedWidth = (SIZE - 1 - width) / 2;
+	
+	unsigned char tempImage[SIZE][SIZE];
+	
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = 0; j < SIZE; ++j) {
+			tempImage[i][j] = image[i][j];
+			image[i][j] = 255;
+		}
+	}
+	for (int i = y, l = 0; i <= width; ++i, ++l) {
+		for (int j = x, m = 0; j <= length; ++j, ++m) {
+			image[skippedWidth + l][skippedLength + m] = tempImage[i][j];
+		}
+	}
+}
+
+void detectImageEdges(){
+	unsigned char tempImage[SIZE][SIZE];
+//	for (int i = 0; i < SIZE; ++i) {
+//		for (int j = 0; j < SIZE; ++j) {
+//			tempImage[i][j] = image[i][j];
+//		}
+//	}
+	convertImageToBlackAndWhite();
+	for (int i = 1; i < SIZE - 1; ++i) {
+		for (int j = 1; j < SIZE - 1; ++j) {
+			if (image[i][j+1] == 0 && image[i+1][j] == 0 && image[i+1][j+1] == 0 && image[i][j-1] == 0 && image[i-1][j] == 0 && image[i-1][j-1] == 0 && image[i-1][j+1] == 0 && image[i+1][j-1] == 0){
+				tempImage[i][j] = 255;
+			} else {
+				tempImage[i][j] = 0;
+			}
+		}
+	}
+	
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = 0; j < SIZE; ++j) {
+			image[i][j] = tempImage[i][j];
+		}
+	}
+}
+// End Filters
 
 
 void skewHorizontally() {
