@@ -1,23 +1,9 @@
 // FCAI – OOP Programming – 2023 - Assignment 1
 // Program Name: main.cpp
 // Last Modification Date: 07/10/2023
-// Authors: [
-//              {
-//					name: "Mahmoud Mohammed Nael",
-//                  id: 20220322,
-//					group: A,
-//              },
-//              {
-//					name: "Mazen Mohammed Nayef",
-//                  id: 20220268,
-//					group: A,
-//              },
-//              {
-//					name: "Mohammed Ahmed Fathy",
-//                  id: N/A,
-//					group: A,
-//              },
-//          ]
+// Author1: Mahmoud Mohammed Nael, 20220322, A
+// Author2: Mazen Mohammed Nayef, 20220268, A
+// Author3: Mohammed Ahmed Fathy, N/A, A
 // Teaching Assistant: N/A
 // Purpose: Demonstrate use of bmplip for handling
 //          bmp colored and grayscale images
@@ -53,10 +39,20 @@ void mergeImages();
 void lightenOrDarkenImage();
 void enlargeImage();
 void shuffleImage();
+void skewHorizontally();
+void skewVetically();
+void blurImage();
+void shrinkImage();
+void mirrorLeft();
+void mirrorRight();
+void mirrorUpper();
+void mirrorLower();
+void mirrorImage();
+void cropImage();
+void detectImageEdges();
 // End Filters
 
 int main() {
-	cout << "Ahlan ya user ya habibi ;)" << endl;
     loadImage();
 	string filterNumber = inputFilterNumber();
 	doSomethingForImage(filterNumber);
@@ -88,13 +84,13 @@ int main() {
 
 string inputFilterNumber(){
 	string filterNumber;
-	cout << "1. Black and White\n" << "2. Invert Image\n" << "3. Merge Images\n" << "4. Flip Image\n" << "5. Rotate Image\n" << "6. Darken or Lighten Image\n"<<"8 .Enlarge image\n"<<"b .Suffle Image\n" << "s. Save the image to a file\n" << "0. Exit\n" << endl;
+	cout << "1. Black and White\n" << "2. Invert Image\n" << "3. Merge Images\n" << "4. Flip Image\n" << "5. Rotate Image\n" << "6. Darken or Lighten Image\n" << "7. Detect Image Edges\n" << "a. Mirror Image\n" << "d. Crop Image\n" << "s. Save the image to a file\n" << "0. Exit\n" << endl;
 	cout << "Enter the number of the filter you desire or 0 to exit: " << endl;
 	while (cin >> filterNumber) {
-		if ((filterNumber[0] >= '0' && filterNumber[0] <= '8') || filterNumber[0] == 's'||filterNumber[0]=='b') {
+		if ((filterNumber[0] >= '0' && filterNumber[0] <= '9' ) || (filterNumber[0] >= 'a' && filterNumber[0] <= 'f') || filterNumber[0] == 's') {
 			return filterNumber;
 		} else {
-			cout << "Enter a valid number from 0~6 or s: " << endl;
+			cout << "Enter a valid number from 0~9 or a~f or s: " << endl;
 		}
 	}
 }
@@ -159,7 +155,33 @@ void doSomethingForImage(string filter) {
 		case 's':
 			saveImage();
 			break;
-
+        case '9':
+            shrinkImage();
+            break;
+		case 's':
+			saveImage();
+			break;
+        case 'c':
+            blurImage();
+            break;
+        case 'e':
+            skewHorizontally();
+            break;
+        case 'f':
+            skewVetically();
+            break;
+		case '7':
+			detectImageEdges();
+			break;
+		case 's':
+			saveImage();
+			break;
+		case 'a':
+			mirrorImage();
+			break;
+		case 'd':
+			cropImage();
+			break;
 	}
 }
 
@@ -289,7 +311,7 @@ void rotateImage () {
 void mergeImages() {
 	int average;
 	
-	// Add 2 photos to each other by taking the average of gray level of each corresponding pixel.
+	// Add 2 photos to each other by taking the average of grey level of each corresponding pixel.
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
 			average = ( image[i][j] + image2[i][j] ) / 2;
@@ -320,7 +342,7 @@ void lightenOrDarkenImage() {
 		}
 	}
 		
-		// Process of darken images.
+    // Process of darken images.
 	else if (type[0] == 'D' || type[0] == 'd'){
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
@@ -329,6 +351,7 @@ void lightenOrDarkenImage() {
 		}
 	}
 }
+
 
 void enlargeImage(){
     int qrt;
@@ -497,6 +520,310 @@ void shuffleImage(){
         }
     }
 
+
+void mirrorLeft(){
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = 0; j < SIZE / 2; ++j) {
+			image[i][SIZE - 1 - j] = image[i][j];
+		}
+	}
+}
+
+void mirrorRight(){
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = SIZE / 2 - 1, k = SIZE / 2 - 1; j < SIZE, k >= 0; ++j, --k) {
+			image[i][k] = image[i][j];
+		}
+	}
+}
+
+void mirrorUpper(){
+	for (int i = 0; i < SIZE / 2; ++i) {
+		for (int j = 0; j < SIZE; ++j) {
+			image[SIZE - 1 - i][j] = image[i][j];
+		}
+	}
+}
+
+void mirrorLower(){
+	for (int i = SIZE / 2 - 1, k = SIZE / 2 - 1; i < SIZE, k >= 0; ++i, --k) {
+		for (int j = 0; j < SIZE; ++j) {
+			image[k][j] = image[i][j];
+		}
+	}
+}
+
+void mirrorImage() {
+	string enteredMirrorNumber;
+	cout << "1. Mirror Left\n" << "2. Mirror Right\n" << "3. Mirror Upper\n" << "4. Mirror Lower" << endl;
+	cout << "Enter the desired number: " << endl;
+	while (cin >> enteredMirrorNumber) {
+		if (enteredMirrorNumber[0] >= '1' && enteredMirrorNumber[0] <= '4') {
+			break;
+		} else {
+			cout << "Enter a valid number from 1~4: " << endl;
+		}
+	}
+	switch (enteredMirrorNumber[0]) {
+		case '1':
+			mirrorLeft();
+			break;
+		case '2':
+			mirrorRight();
+			break;
+		case '3':
+			mirrorUpper();
+			break;
+		case '4':
+			mirrorLower();
+			break;
+	}
+}
+
+void cropImage(){
+	int x, y;
+	cout << "Please, enter the desired coordinates" << endl;
+	cout << "X: \n";
+	cin >> x;
+	cout << "Y: \n";
+	cin >> y;
+	
+	int length, width, skippedLength, skippedWidth;
+	cout << "Please, enter the desired dimensions" << endl;
+	cout << "Length: \n";
+	cin >> length;
+	cout << "Width: \n";
+	cin >> width;
+	
+	skippedLength = (SIZE - 1 - length) / 2;
+	skippedWidth = (SIZE - 1 - width) / 2;
+	
+	unsigned char tempImage[SIZE][SIZE];
+	
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = 0; j < SIZE; ++j) {
+			tempImage[i][j] = image[i][j];
+			image[i][j] = 255;
+		}
+	}
+	for (int i = y, l = 0; i <= width; ++i, ++l) {
+		for (int j = x, m = 0; j <= length; ++j, ++m) {
+			image[skippedWidth + l][skippedLength + m] = tempImage[i][j];
+		}
+	}
+}
+
+void detectImageEdges(){
+	unsigned char tempImage[SIZE][SIZE];
+//	for (int i = 0; i < SIZE; ++i) {
+//		for (int j = 0; j < SIZE; ++j) {
+//			tempImage[i][j] = image[i][j];
+//		}
+//	}
+	convertImageToBlackAndWhite();
+	for (int i = 1; i < SIZE - 1; ++i) {
+		for (int j = 1; j < SIZE - 1; ++j) {
+			if (image[i][j+1] == 0 && image[i+1][j] == 0 && image[i+1][j+1] == 0 && image[i][j-1] == 0 && image[i-1][j] == 0 && image[i-1][j-1] == 0 && image[i-1][j+1] == 0 && image[i+1][j-1] == 0){
+				tempImage[i][j] = 255;
+			} else {
+				tempImage[i][j] = 0;
+			}
+		}
+	}
+	
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = 0; j < SIZE; ++j) {
+			image[i][j] = tempImage[i][j];
+		}
+	}
 }
 // End Filters
 
+
+void skewHorizontally() {
+    // Create New Image, Defining The Variables And Getting The Skew Degree.
+    unsigned char shrinkedImage[SIZE][SIZE];
+    int distance, degree ;
+    double shrinkRatio, shrink;
+    cout << "Please Enter The Degree Of Skew You Want. : " << endl;
+    cin >> degree;
+
+    if (degree < 45){
+        // Preparing The Size Of Shrinked Image, Shrinking Ratio And The Other Variables.
+        distance = SIZE*tan(degree/57.295779513);
+        shrink = 256-distance;
+        shrinkRatio = 256/shrink;
+        double placement = SIZE-shrink;
+        double movementDecrease = placement/SIZE;
+
+        // Whiten The Shrinked Image.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                shrinkedImage[i][j] = 255;
+            }
+        }
+
+        // Shrinking The Image Using The Suitable Ratio.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if ((j*shrinkRatio) <= 255){
+                    int var = j*shrinkRatio;
+                    shrinkedImage[i][j] = image[i][var];
+                }
+            }
+        }
+
+        // Whiten The Image To Save In It The Skew Image.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = 255;
+            }
+        }
+
+        // Skew The Image.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < shrink; j++) {
+                image[i][(int)placement+j] = shrinkedImage[i][j];
+            }
+            placement -= movementDecrease;
+        }
+    }
+
+    else {
+        // Whiten The Image As The Degree Is More Than 45.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = 255;
+            }
+        }
+    }
+}
+
+void skewVetically() {
+    // Create New Image, Defining The Variables And Getting The Skew Degree.
+    unsigned char shrinkedImage[SIZE][SIZE];
+    double shrink, shrinkRatio;
+    int distance = 0,degree = 0;
+    cout << "Please Enter The Degree Of Skew You Want. : ";
+    cin >> degree;
+
+    if ( degree < 45) {
+        // Preparing The Size Of Shrinked Image, Shrinking Ratio And The Other Variables.
+        distance = 256*tan(degree/57.295779513);
+        shrink = 256-distance;
+        shrinkRatio = 256/shrink;
+        cout << shrinkRatio << endl;
+        double placement = SIZE-shrink;
+        double movementDecrease = placement/SIZE;
+
+        // Whiten The Shrinked Image.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                shrinkedImage[i][j] = 255;
+            }
+        }
+
+        // Shrinking The Image Using The Suitable Ratio.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if ((i*shrinkRatio) <= 255){
+                    int var = i*shrinkRatio;
+                    shrinkedImage[i][j] = image[var][j];
+                }
+            }
+        }
+
+        // Whiten The Image To Save In It The Skew Image.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = 255;
+            }
+        }
+
+        // Skew The Image.
+        for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < shrink; i++) {
+                image[(int)placement+i][j] = shrinkedImage[i][j];
+            }
+            placement -= movementDecrease;
+        }
+    }
+
+    else {
+        // Whiten The Image As The Degree Is More Than 45.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = 255;
+            }
+        }
+    }
+}
+
+void blurImage() {
+    int avg = 0;
+    for ( int i = 1 ; i < SIZE ; i++) {
+        for ( int j = 1 ; j < SIZE ; j++) {
+            // Getting Average of Grey color Through a Square 3*3.
+            avg += image[i-1][j-1];
+            avg += image[i-1][j];
+            avg += image[i-1][j+1];
+            avg += image[i][j-1];
+            avg += image[i][j];
+            avg += image[i][j+1];
+            avg += image[i+1][j-1];
+            avg += image[i+1][j];
+            avg += image[i+1][j+1];
+
+            // Make Sure That Average Is Not More Than 255.
+            avg = avg/9;
+            if ( avg > 255) {
+                image[i][j] = 255;
+            }
+            else {
+                image[i][j] = avg;
+            }
+        }
+    }
+}
+
+void shrinkImage() {
+    int shrinking, type;
+    unsigned char shrinkedImage[SIZE][SIZE];
+
+    // Get the scale of shrinking that the customer needs.
+    cout << "Shrink to (1)Half, (2)Third or (3)Fourth? ";
+    cin >> type;
+
+    // Define the variable shrinking.
+    if (type == 1){
+        shrinking = 2;
+    }
+    else if (type == 2){
+        shrinking = 3;
+    }
+    else{
+        shrinking = 4;
+    }
+
+    // Shrinking process.
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            shrinkedImage[i][j] = 255;
+        }
+    }
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            if ( (i*shrinking) <= 255 && (j*shrinking) <= 255){
+                shrinkedImage[i][j] = image[i*shrinking][j*shrinking];
+            }
+        }
+    }
+
+    // Saving edits in the image to preview it.
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            image[i][j] = shrinkedImage[i][j];
+        }
+    }
+}
+// End Filters
