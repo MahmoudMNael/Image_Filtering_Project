@@ -29,12 +29,18 @@
 using namespace std;
 unsigned char image[SIZE][SIZE];
 unsigned char image2[SIZE][SIZE];
+unsigned char imageq1[128][128];
+unsigned char imageq2[128][128];
+unsigned char imageq3[128][128];
+unsigned char imageq4[128][128];
+
 
 string inputFilterNumber();
 void loadImage();
 void loadImage2();
 void doSomethingForImage(string filter);
 void saveImage();
+void dividedImage();
 
 // Filters
 void rotateImage();
@@ -45,6 +51,8 @@ void flipVertical();
 void flipHorizontal();
 void mergeImages();
 void lightenOrDarkenImage();
+void enlargeImage();
+void shuffleImage();
 // End Filters
 
 int main() {
@@ -58,7 +66,7 @@ int main() {
 		if(filterNumber[0] == 's'){
 			string inputChar;
 			cout << "1. Do you want to continue on the same image?\n2. Or choose another one?\n 0. Exit" << endl;
-			while (cin >> inputChar) {
+            while (cin>>inputChar) {
 				if (inputChar[0] >= '0' || inputChar[0] <= '2') {
 					if (inputChar[0] == '1'){
 						break;
@@ -67,7 +75,7 @@ int main() {
 						break;
 					} else {
 						cout << "Thanks for using our program!" << endl;
-						return 0;
+                        return 0;
 					}
 				} else {
 					cout << "Enter a valid number from 0~2: " << endl;
@@ -80,10 +88,10 @@ int main() {
 
 string inputFilterNumber(){
 	string filterNumber;
-	cout << "1. Black and White\n" << "2. Invert Image\n" << "3. Merge Images\n" << "4. Flip Image\n" << "5. Rotate Image\n" << "6. Darken or Lighten Image\n" << "s. Save the image to a file\n" << "0. Exit\n" << endl;
+	cout << "1. Black and White\n" << "2. Invert Image\n" << "3. Merge Images\n" << "4. Flip Image\n" << "5. Rotate Image\n" << "6. Darken or Lighten Image\n"<<"8 .Enlarge image\n"<<"b .Suffle Image\n" << "s. Save the image to a file\n" << "0. Exit\n" << endl;
 	cout << "Enter the number of the filter you desire or 0 to exit: " << endl;
 	while (cin >> filterNumber) {
-		if ((filterNumber[0] >= '0' && filterNumber[0] <= '6') || filterNumber[0] == 's') {
+		if ((filterNumber[0] >= '0' && filterNumber[0] <= '8') || filterNumber[0] == 's'||filterNumber[0]=='b') {
 			return filterNumber;
 		} else {
 			cout << "Enter a valid number from 0~6 or s: " << endl;
@@ -139,9 +147,19 @@ void doSomethingForImage(string filter) {
 		case '6':
             lightenOrDarkenImage();
 			break;
+        case '7':
+            break;
+        case '8':
+            enlargeImage();
+            break;
+        case'b':
+            dividedImage();
+            shuffleImage();
+            break;
 		case 's':
 			saveImage();
 			break;
+
 	}
 }
 
@@ -310,6 +328,175 @@ void lightenOrDarkenImage() {
 			}
 		}
 	}
+}
+
+void enlargeImage(){
+    int qrt;
+    cout<<"enter the quarter which need to be large: \n";
+    while(cin>> qrt){
+        if(qrt==1||qrt==2||qrt==3||qrt==4){
+            break;
+        }else
+            cout<<"enter the valid number 1 or 2 or 3 or 4:";
+    }
+    if(qrt==1) {
+        for (int i = 0; i < 128; i++) {
+            for (int j = 0; j < 128; j++) {
+               imageq1[i][j]=image[i][j];
+            }
+        }
+        for (int i = 0; i < 128; i++) {
+            for (int j = 0; j < 128; j++) {
+                for(int k =0;k<2;k++){
+                    for(int l=0;l<2;l++){
+                        image[(i*2)+k][(j*2)+l]=imageq1[i][j];
+                    }
+                }
+            }
+        }
+
+    }else if(qrt==2){
+        for (int i = 0; i < 128; i++) {
+            int x = 0;
+            for (int j = 127; j < 256; j++) {
+                imageq1[i][x] = image[i][j];
+                x++;
+            }
+        }
+        for (int i = 0; i < 128; i++) {
+            for (int j = 0; j < 128; j++) {
+                for(int k =0;k<2;k++){
+                    for(int l=0;l<2;l++){
+                        image[(i*2)+k][(j*2)+l]=imageq1[i][j];
+                    }
+                }
+            }
+        }
+    }else if(qrt==3){
+        for (int i = 127,x=0; i < 256; i++,x++) {
+            for (int j = 0; j < 128; j++) {
+                imageq1[x][j] = image[i][j];
+
+            }
+        }
+        for (int i = 0; i < 128; i++) {
+            for (int j = 0; j < 128; j++) {
+                for(int k =0;k<2;k++){
+                    for(int l=0;l<2;l++){
+                        image[(i*2)+k][(j*2)+l]=imageq1[i][j];
+                    }
+                }
+            }
+        }
+    }else if(qrt==4){
+        for (int i = 127,x=0; i < 256; i++,x++) {
+            for (int j = 127,y=0; j < 256; j++,y++) {
+                imageq1[x][y] = image[i][j];
+            }
+        }
+        for (int i = 0; i < 128; i++) {
+            for (int j = 0; j < 128; j++) {
+                for(int k =0;k<2;k++){
+                    for(int l=0;l<2;l++){
+                        image[(i*2)+k][(j*2)+l]=imageq1[i][j];
+                    }
+                }
+            }
+        }
+
+    }
+
+}
+
+void dividedImage(){
+    for(int i=0;i<128;i++){
+        for(int j=0;j<128;j++){
+            imageq1[i][j]=image[i][j];
+        }
+    }
+    for(int i=0;i<128;i++){
+        for(int j=128,x=0;j<256;j++,x++){
+            imageq2[i][x]=image[i][j];
+        }
+    }
+    for(int i=128,y=0;i<256;i++,y++){
+        for(int j=0;j<128;j++){
+            imageq3[y][j]=image[i][j];
+        }
+    }
+    for(int i=128,y=0;i<256;i++,y++){
+        for(int j=128,x=0;j<256;j++,x++){
+            imageq4[y][x]=image[i][j];
+        }
+    }
+}
+void shuffleImage(){
+    int qrt;
+    cout<<"enter the order of quarter you need: \n";
+    for(int k=0;k<4;k++){
+        cin>>qrt;
+        if(qrt<=0&&qrt>4){
+            cout<<"enter the valid no between 1 to 4 : \n";
+        }
+        if (k==0){
+            for(int i=0;i<128;i++){
+                for(int j=0;j<128;j++){
+                    if(qrt==1){
+                        image[i][j]=imageq1[i][j];
+                    }else if (qrt==2){
+                        image[i][j]=imageq2[i][j];
+                    }else if (qrt==3){
+                        image[i][j]=imageq3[i][j];
+                    }else if (qrt==4){
+                        image[i][j]=imageq4[i][j];
+                    }
+                }
+            }
+        }else if (k==1){
+            for(int i=0;i<128;i++){
+                for(int j=128,x=0;j<256;j++,x++){
+                    if(qrt==1){
+                        image[i][j]=imageq1[i][x];
+                    }else if (qrt==2){
+                        image[i][j]=imageq2[i][x];
+                    }else if (qrt==3){
+                        image[i][j]=imageq3[i][x];
+                    }else if (qrt==4){
+                        image[i][j]=imageq4[i][x];
+                    }
+                }
+            }
+        }else if(k==2){
+            for(int i=128,y=0;i<256;i++,y++){
+                for(int j=0;j<128;j++){
+                    if(qrt==1){
+                        image[i][j]=imageq1[y][j];
+                    }else if (qrt==2){
+                        image[i][j]=imageq2[y][j];
+                    }else if (qrt==3){
+                        image[i][j]=imageq3[y][j];
+                    }else if (qrt==4){
+                        image[i][j]=imageq4[y][j];
+                    }
+                }
+            }
+        }else if (k==3){
+            for(int i=128,y=0;i<256;i++,y++){
+                for(int j=128,x=0;j<256;j++,x++){
+                    if(qrt==1){
+                        image[i][j]=imageq1[y][x];
+                    }else if (qrt==2){
+                        image[i][j]=imageq2[y][x];
+                    }else if (qrt==3){
+                        image[i][j]=imageq3[y][x];
+                    }else if (qrt==4){
+                        image[i][j]=imageq4[y][x];
+                    }
+                }
+            }
+        }
+    }
+
 }
 // End Filters
 
