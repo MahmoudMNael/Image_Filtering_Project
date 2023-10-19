@@ -86,7 +86,7 @@ int main() {
 string inputFilterNumber(){
 	string filterNumber;
 	cout << "1. Black and White\n" << "2. Invert Image\n" << "3. Merge Images\n" << "4. Flip Image\n" << "5. Rotate Image\n" << "6. Darken or Lighten Image\n" << "7. Detect Image Edges\n" << "8. Enlarge Image\n" << "9. Shrink Image\n" << "a. Mirror Image\n" << "b. Shuffle Image\n" << "c. Blur Image\n" << "d. Crop Image\n" << "e. Skew Image Horizontally\n" << "f. Skew Image Vertically\n" << "s. Save the image to a file\n" << "0. Exit\n" << endl;
-	cout << "Enter the number of the filter you desire or 0 to exit: " << endl;
+	cout << "Enter the number of the filter you desire or 0 to exit or 's' to save: " << endl;
 	while (cin >> filterNumber) {
 		if ((filterNumber[0] >= '0' && filterNumber[0] <= '9' ) || (filterNumber[0] >= 'a' && filterNumber[0] <= 'f') || filterNumber[0] == 's') {
 			return filterNumber;
