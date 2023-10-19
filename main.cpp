@@ -31,6 +31,10 @@ void flipVertical();
 void flipHorizontal();
 void mergeImages();
 void lightenOrDarkenImage();
+void skewHorizontally();
+void skewVetically();
+void blurImage();
+void shrinkImage();
 void mirrorLeft();
 void mirrorRight();
 void mirrorUpper();
@@ -131,6 +135,21 @@ void doSomethingForImage(string filter) {
 		case '6':
             lightenOrDarkenImage();
 			break;
+        case '9':
+            shrinkImage();
+            break;
+		case 's':
+			saveImage();
+			break;
+        case 'c':
+            blurImage();
+            break;
+        case 'e':
+            skewHorizontally();
+            break;
+        case 'f':
+            skewVetically();
+            break;
 		case '7':
 			detectImageEdges();
 			break;
@@ -272,7 +291,7 @@ void rotateImage () {
 void mergeImages() {
 	int average;
 	
-	// Add 2 photos to each other by taking the average of gray level of each corresponding pixel.
+	// Add 2 photos to each other by taking the average of grey level of each corresponding pixel.
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
 			average = ( image[i][j] + image2[i][j] ) / 2;
@@ -303,7 +322,7 @@ void lightenOrDarkenImage() {
 		}
 	}
 		
-		// Process of darken images.
+    // Process of darken images.
 	else if (type[0] == 'D' || type[0] == 'd'){
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
@@ -431,3 +450,191 @@ void detectImageEdges(){
 }
 // End Filters
 
+
+void skewHorizontally() {
+    // Create New Image, Defining The Variables And Getting The Skew Degree.
+    unsigned char shrinkedImage[SIZE][SIZE];
+    int distance, degree ;
+    double shrinkRatio, shrink;
+    cout << "Please Enter The Degree Of Skew You Want. : " << endl;
+    cin >> degree;
+
+    if (degree < 45){
+        // Preparing The Size Of Shrinked Image, Shrinking Ratio And The Other Variables.
+        distance = SIZE*tan(degree/57.295779513);
+        shrink = 256-distance;
+        shrinkRatio = 256/shrink;
+        double placement = SIZE-shrink;
+        double movementDecrease = placement/SIZE;
+
+        // Whiten The Shrinked Image.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                shrinkedImage[i][j] = 255;
+            }
+        }
+
+        // Shrinking The Image Using The Suitable Ratio.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if ((j*shrinkRatio) <= 255){
+                    int var = j*shrinkRatio;
+                    shrinkedImage[i][j] = image[i][var];
+                }
+            }
+        }
+
+        // Whiten The Image To Save In It The Skew Image.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = 255;
+            }
+        }
+
+        // Skew The Image.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < shrink; j++) {
+                image[i][(int)placement+j] = shrinkedImage[i][j];
+            }
+            placement -= movementDecrease;
+        }
+    }
+
+    else {
+        // Whiten The Image As The Degree Is More Than 45.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = 255;
+            }
+        }
+    }
+}
+
+void skewVetically() {
+    // Create New Image, Defining The Variables And Getting The Skew Degree.
+    unsigned char shrinkedImage[SIZE][SIZE];
+    double shrink, shrinkRatio;
+    int distance = 0,degree = 0;
+    cout << "Please Enter The Degree Of Skew You Want. : ";
+    cin >> degree;
+
+    if ( degree < 45) {
+        // Preparing The Size Of Shrinked Image, Shrinking Ratio And The Other Variables.
+        distance = 256*tan(degree/57.295779513);
+        shrink = 256-distance;
+        shrinkRatio = 256/shrink;
+        cout << shrinkRatio << endl;
+        double placement = SIZE-shrink;
+        double movementDecrease = placement/SIZE;
+
+        // Whiten The Shrinked Image.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                shrinkedImage[i][j] = 255;
+            }
+        }
+
+        // Shrinking The Image Using The Suitable Ratio.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if ((i*shrinkRatio) <= 255){
+                    int var = i*shrinkRatio;
+                    shrinkedImage[i][j] = image[var][j];
+                }
+            }
+        }
+
+        // Whiten The Image To Save In It The Skew Image.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = 255;
+            }
+        }
+
+        // Skew The Image.
+        for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < shrink; i++) {
+                image[(int)placement+i][j] = shrinkedImage[i][j];
+            }
+            placement -= movementDecrease;
+        }
+    }
+
+    else {
+        // Whiten The Image As The Degree Is More Than 45.
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = 255;
+            }
+        }
+    }
+}
+
+void blurImage() {
+    int avg = 0;
+    for ( int i = 1 ; i < SIZE ; i++) {
+        for ( int j = 1 ; j < SIZE ; j++) {
+            // Getting Average of Grey color Through a Square 3*3.
+            avg += image[i-1][j-1];
+            avg += image[i-1][j];
+            avg += image[i-1][j+1];
+            avg += image[i][j-1];
+            avg += image[i][j];
+            avg += image[i][j+1];
+            avg += image[i+1][j-1];
+            avg += image[i+1][j];
+            avg += image[i+1][j+1];
+
+            // Make Sure That Average Is Not More Than 255.
+            avg = avg/9;
+            if ( avg > 255) {
+                image[i][j] = 255;
+            }
+            else {
+                image[i][j] = avg;
+            }
+        }
+    }
+}
+
+void shrinkImage() {
+    int shrinking, type;
+    unsigned char shrinkedImage[SIZE][SIZE];
+
+    // Get the scale of shrinking that the customer needs.
+    cout << "Shrink to (1)Half, (2)Third or (3)Fourth? ";
+    cin >> type;
+
+    // Define the variable shrinking.
+    if (type == 1){
+        shrinking = 2;
+    }
+    else if (type == 2){
+        shrinking = 3;
+    }
+    else{
+        shrinking = 4;
+    }
+
+    // Shrinking process.
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            shrinkedImage[i][j] = 255;
+        }
+    }
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            if ( (i*shrinking) <= 255 && (j*shrinking) <= 255){
+                shrinkedImage[i][j] = image[i*shrinking][j*shrinking];
+            }
+        }
+    }
+
+    // Saving edits in the image to preview it.
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            image[i][j] = shrinkedImage[i][j];
+        }
+    }
+}
+// End Filters
